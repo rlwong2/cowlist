@@ -18,23 +18,47 @@ app.use((req, res, next) => {
 
 app.get('/api/cows', (req, res) => {
   console.log('Running: GET COWS (server.js)');
-  let query = 'SELECT * FROM cows';
-  db.query(query, (err, results) => {
+  let queryStr = 'SELECT * FROM cows';
+  db.query(queryStr, (err, results) => {
     if (err) {
+      console.log('Error: GET COWS (server.js)')
       res.end('No cows, go add some!')
     } else {
+      console.log('Success: GET COWS (server.js)')
       res.send('Found cows!')
       console.log(results);
       res.end();
     }
-
-
   })
 });
 
 app.post('/api/cows', (req, res) => {
   console.log('Running: POST COW (server.js)');
-  console.log(req.body);
+  console.log(`${req.body.name}, ${req.body.description}`);
+  let queryStr = `INSERT INTO cows (name, description) VALUES ('${req.body.name}', '${req.body.description}')`;
+  db.query(queryStr, (err, results) => {
+    if (err) {
+      console.log('Error: POST COW (server.js)');
+      console.log(err);
+      res.end('Unable to post to database!');
+    } else {
+      console.log('Success: POST COW (server.js)');
+      console.log(results);
+      // res.send(`Success! ${req.body.name} has been added to the database.  Updating cattle...`);
+      db.query(queryStr, (err, results) => {
+        if (err) {
+          console.log('Error: POST > GET COWS (server.js)')
+          res.end('No cows, wait a minute...')
+        } else {
+          console.log('Success: POST > GET COWS (server.js)')
+          console.log(results)
+          res.send('Sending all the cows!')
+          res.end();
+        }
+      })
+    }
+  })
+
 });
 
 let port = process.env.PORT || 3030;
