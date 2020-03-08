@@ -19,7 +19,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.read();
+    // this.read();
   }
 
   read() {
@@ -27,13 +27,15 @@ class App extends React.Component {
     axios.get('http://localhost:3030/api/cows')
       .then(res => {
         const list = res.data;
+        console.log(res.data);
         this.setState({list});
       })
   }
 
-  create(props) {
+  create(object) {
     console.log('Running: create (app.jsx)');
-    axios.post('http://localhost:3030/api/cows')
+    console.log('Sending cow: ', object.name)
+    axios.post('http://localhost:3030/api/cows', object)
       .then(res => {
         console.log(res);
         console.log(res.data);

@@ -5,7 +5,7 @@ class Input extends React.Component {
     super(props);
     this.state = {
       name: '',
-      description: ''
+      description: '',
     };
     this.onChangeName = this.onChangeName.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
@@ -13,18 +13,21 @@ class Input extends React.Component {
   }
 
   onChangeName (e) {
+    e.preventDefault();
     this.setState({
       name: e.target.value
     });
   }
 
   onChangeDescription (e) {
+    e.preventDefault();
     this.setState({
       description: e.target.value
     });
   }
 
-  submit () {
+  submit (e) {
+    e.preventDefault();
     var obj = {}
     obj.name = this.state.name;
     obj.description = this.state.description;
