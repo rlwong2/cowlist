@@ -11,24 +11,25 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentCow: '',
-      list: []
+      cowlist: [],
+      currentCow: ''
     };
     this.read = this.read.bind(this);
     this.create = this.create.bind(this);
+    this.showCow = this.showCow.bind(this);
   }
 
   componentDidMount() {
-    // this.read();
+    this.read();
   }
 
   read() {
     console.log('Running: read (app.jsx)');
     axios.get('http://localhost:3030/api/cows')
       .then(res => {
-        const list = res.data;
+        const cows = res.data;
         console.log(res.data);
-        this.setState({list});
+        this.setState({cowlist: cows});
       })
   }
 
@@ -39,17 +40,34 @@ class App extends React.Component {
       .then(res => {
         console.log(res);
         console.log(res.data);
+        this.read();
       })
       .catch(err => {
         console.log(err)
       })
   }
 
+  showCow(name) {
+    var cow = {};
+    console.log(name)
+    console.log(this.state.cowlist)
+    this.state.cowlist.forEach((element) => {
+      if (element.name === name) {
+        cow.name = element.name;
+        cow.description = element.description;
+      }
+    })
+    console.log('setting state', cow)
+    this.setState({
+      currentCow: cow
+    })
+  }
+
   render() {
     return (<div>
       <Cow cow={this.state.currentCow} />
       <Input create={this.create} />
-      <Cowlist cows={this.state.list} />
+      <Cowlist showCow={this.showCow} cows={this.state.cowlist} />
     </div>)
   }
 }

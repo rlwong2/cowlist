@@ -25,9 +25,9 @@ app.get('/api/cows', (req, res) => {
       res.end('No cows, go add some!')
     } else {
       console.log('Success: GET COWS (server.js)')
-      res.send('Found cows!')
+      // res.send('Sending all the cows!')
       console.log(results);
-      res.end();
+      res.json(results);
     }
   })
 });
@@ -44,18 +44,7 @@ app.post('/api/cows', (req, res) => {
     } else {
       console.log('Success: POST COW (server.js)');
       console.log(results);
-      // res.send(`Success! ${req.body.name} has been added to the database.  Updating cattle...`);
-      db.query(queryStr, (err, results) => {
-        if (err) {
-          console.log('Error: POST > GET COWS (server.js)')
-          res.end('No cows, wait a minute...')
-        } else {
-          console.log('Success: POST > GET COWS (server.js)')
-          console.log(results)
-          res.send('Sending all the cows!')
-          res.end();
-        }
-      })
+      res.end(`Success! ${req.body.name} has been added to the database.  Updating cattle...`);
     }
   })
 
